@@ -1,0 +1,36 @@
+---
+- name: ownership, group and permission change and create the links 
+  hosts: all
+  become: true 
+  tasks:
+    - name: create user and group
+      ansible.builtin.user: 
+        name: mr8821
+        state: present
+        shell: /bin/bash
+    - name: create group
+      ansible.builtin.group:
+        name: consultents
+        state: present 
+    - name: touch the file 
+      ansible.builtin.file:
+        path: /home/ansible/temp.txt
+        state: touch
+        group: consultents
+        owner: mr8821
+        mode: '0777' 
+
+    - name: ownership, group and permission change 
+      ansible.builtin.file:
+        path: /home/ansible/temp.txt
+        owner: mr8821
+        group: consultents
+        mode: '0644'
+    - name: create symbolic link 
+      ansible.builtin.file:
+        src: /home/ansible/temp.txt
+        dest: /tmp/temp.txt
+        owner: ansible
+        group: ansible 
+        state: link 
+

@@ -5,3 +5,4 @@
 [delhi:vars]
 ansible_user=ansible
 ansible_ssh_pass=8821
+msg_name=helloworld 
