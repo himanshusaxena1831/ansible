@@ -1,0 +1,8 @@
+---
+- name: Show Target Machine IPs
+  hosts: delhi
+  gather_facts: true
+  tasks:
+    - name: Display Hostname and IP
+      ansible.builtin.debug:
+        msg: "{{ inventory_hostname }} has IP {{ ansible_default_ipv4.address }}"

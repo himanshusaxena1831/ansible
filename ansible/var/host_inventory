@@ -1,0 +1,7 @@
+[delhi]
+172.18.0.2
+
+
+[delhi:vars]
+ansible_user=ansible
+ansible_ssh_pass=8821

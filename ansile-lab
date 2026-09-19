@@ -1,0 +1,4 @@
+mkdir -p ansible/keys
+ssh-keygen -t rsa -b 2048 -N "" -f ansible/keys/id_rsa
+chmod 600 ansible/keys/id_rsa
+chmod 644 ansible/keys/id_rsa.pub

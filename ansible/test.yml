@@ -1,0 +1,15 @@
+---
+- name: Verify All 10 Target Nodes
+  hosts: delhi
+  gather_facts: false
+  tasks:
+    - name: Ping test
+      ansible.builtin.ping:
+
+    - name: Get Hostname
+      ansible.builtin.raw: hostname
+      register: host_name
+
+    - name: Display Output
+      ansible.builtin.debug:
+        msg: "Connected successfully to {{ host_name.stdout | trim }}"

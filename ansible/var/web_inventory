@@ -1,0 +1,12 @@
+[delhi]
+web01 	ansible_host=172.18.0.2
+web03	ansible_host=172.18.0.11
+web02	ansible_host=172.18.0.9
+
+[noida]
+db01 	ansible_host=172.18.0.12
+db02	ansible_host=172.18.0.5
+
+
+
+

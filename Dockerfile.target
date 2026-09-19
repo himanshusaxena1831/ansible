@@ -1,0 +1,21 @@
+FROM alpine:latest
+
+RUN apk update && \
+    apk add --no-cache \
+    openssh \
+    python3 \
+    sudo \
+    shadow \
+    bash
+
+# Generate SSH host keys
+RUN ssh-keygen -A
+
+# Create ansible user and grant passwordless sudo
+RUN useradd -m -s /bin/bash -u 1000 ansible && \
+    echo 'ansible:ansible' | chpasswd && \
+    echo 'ansible ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
+
+EXPOSE 22
+
+CMD ["/usr/sbin/sshd", "-D", "-e"]

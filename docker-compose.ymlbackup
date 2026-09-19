@@ -1,0 +1,71 @@
+services:
+  controller:
+    build:
+      context: .
+      dockerfile: Dockerfile.controller
+    container_name: ansible-controller
+    hostname: controller
+    volumes:
+      - ./ansible:/home/ansible/workdir
+    networks:
+      - ansible-net
+    stdin_open: true
+    tty: true
+
+  target1: &target-defaults
+    build:
+      context: .
+      dockerfile: Dockerfile.target
+    container_name: ansible-target1
+    hostname: target1
+    networks:
+      - ansible-net
+
+  target2:
+    <<: *target-defaults
+    container_name: ansible-target2
+    hostname: target2
+
+  target3:
+    <<: *target-defaults
+    container_name: ansible-target3
+    hostname: target3
+
+  target4:
+    <<: *target-defaults
+    container_name: ansible-target4
+    hostname: target4
+
+  target5:
+    <<: *target-defaults
+    container_name: ansible-target5
+    hostname: target5
+
+  target6:
+    <<: *target-defaults
+    container_name: ansible-target6
+    hostname: target6
+
+  target7:
+    <<: *target-defaults
+    container_name: ansible-target7
+    hostname: target7
+
+  target8:
+    <<: *target-defaults
+    container_name: ansible-target8
+    hostname: target8
+
+  target9:
+    <<: *target-defaults
+    container_name: ansible-target9
+    hostname: target9
+
+  target10:
+    <<: *target-defaults
+    container_name: ansible-target10
+    hostname: target10
+
+networks:
+  ansible-net:
+    driver: bridge
