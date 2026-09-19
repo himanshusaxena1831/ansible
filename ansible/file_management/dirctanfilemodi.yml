@@ -1,0 +1,17 @@
+---
+- name: directory creation
+  hosts: all 
+  become: true
+  tasks: 
+    - name: directory creation using ansible 
+      ansible.builtin.file: 
+        path: /tmp/demp
+        state: directory
+        mode: '0755'
+    - name: update file modification time 
+      ansible.builtin.file:
+        path: /home/ansible/temp.txt 
+        state: file
+        modification_time: now
+        access_time: now 
+  
