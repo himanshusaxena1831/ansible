@@ -1,0 +1,13 @@
+---
+- name: how to set the indexing 
+  hosts: all 
+  become: true
+  tasks:
+    - name: echo var 
+      ansible.builtin.command:
+        /bin/echo "hello world from element number {{ idx }}"
+      loop:
+        - 'ada'
+        - 'alxa'
+      loop_control:
+        index_var: idx 

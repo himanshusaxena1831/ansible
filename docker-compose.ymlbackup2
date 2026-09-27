@@ -1,3 +1,5 @@
+
+
 services:
   controller:
     build:
@@ -26,8 +28,6 @@ services:
     networks:
       ansible-net:
         ipv4_address: 172.18.0.3
-    ports:
-      - "${TARGET1_PORT:-8001:80}"
     restart: always
 
   target2:
@@ -37,8 +37,6 @@ services:
     networks:
       ansible-net:
         ipv4_address: 172.18.0.4
-    ports:
-      - "${TARGET2_PORT:-8002:80}"
 
   target3:
     <<: *target-defaults
@@ -47,8 +45,6 @@ services:
     networks:
       ansible-net:
         ipv4_address: 172.18.0.8
-    ports:
-      - "${TARGET3_PORT:-8003:80}"
 
   target4:
     <<: *target-defaults
@@ -57,8 +53,6 @@ services:
     networks:
       ansible-net:
         ipv4_address: 172.18.0.6
-    ports:
-      - "${TARGET4_PORT:-8004:80}"
 
   target5:
     <<: *target-defaults
@@ -67,8 +61,6 @@ services:
     networks:
       ansible-net:
         ipv4_address: 172.18.0.2
-    ports:
-      - "${TARGET5_PORT:-8005:80}"
 
   target6:
     <<: *target-defaults
@@ -77,8 +69,6 @@ services:
     networks:
       ansible-net:
         ipv4_address: 172.18.0.9
-    ports:
-      - "${TARGET6_PORT:-8006:80}"
 
   target7:
     <<: *target-defaults
@@ -87,8 +77,6 @@ services:
     networks:
       ansible-net:
         ipv4_address: 172.18.0.12
-    ports:
-      - "${TARGET7_PORT:-8007:80}"
 
   target8:
     <<: *target-defaults
@@ -97,8 +85,6 @@ services:
     networks:
       ansible-net:
         ipv4_address: 172.18.0.5
-    ports:
-      - "${TARGET8_PORT:-8008:80}"
 
   target9:
     <<: *target-defaults
@@ -107,8 +93,6 @@ services:
     networks:
       ansible-net:
         ipv4_address: 172.18.0.7
-    ports:
-      - "${TARGET9_PORT:-8009:80}"
 
   target10:
     <<: *target-defaults
@@ -117,8 +101,6 @@ services:
     networks:
       ansible-net:
         ipv4_address: 172.18.0.11
-    ports:
-      - "${TARGET10_PORT:-8010:80}"
 
   # ==============================
   # Debian Targets (debian1 - 3)
@@ -132,8 +114,6 @@ services:
     networks:
       ansible-net:
         ipv4_address: 172.18.0.21
-    ports:
-      - "${DEBIAN1_PORT:-9001:80}"
     restart: always
 
   debian2:
@@ -143,8 +123,6 @@ services:
     networks:
       ansible-net:
         ipv4_address: 172.18.0.22
-    ports:
-      - "${DEBIAN2_PORT:-9002:80}"
 
   debian3:
     <<: *debian-defaults
@@ -153,8 +131,6 @@ services:
     networks:
       ansible-net:
         ipv4_address: 172.18.0.23
-    ports:
-      - "${DEBIAN3_PORT:-9003:80}"
 
 networks:
   ansible-net:

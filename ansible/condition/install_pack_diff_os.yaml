@@ -1,0 +1,23 @@
+---
+- name: install package using conditions
+  hosts: all 
+  become: true 
+  tasks:
+    - name: if the package manager is rpm based 
+      community.general.apk:
+        name: nginx 
+        state: present
+#        enabled: yes
+      when: ansible_facts['distribution'] == "Alpine"
+    - name: if the package manager is debian based 
+      ansible.builtin.apt: 
+        name: nginx
+        state: present
+ #       enabled: yes
+      when: ansible_facts['distribution'] == "Debian"
+    - name: if the pkg is rpm
+      ansible.builtin.dnf:
+        name: nginx
+        state: present
+  #      enabled: yes
+      when: ansible_facts['distribution'] == "Centos"

@@ -1,0 +1,29 @@
+---
+- name: install the pkg using apk and apt
+  hosts: all
+  become: true
+  tasks: 
+    - name: get the distribution
+      ansible.builtin.set_fact:
+        distribution: "{{ ansible_facts['distribution'] }}"
+    
+#    - name: install pkg on alpine linux 
+#      apk:
+#        name: httpd
+#        state: present
+#        enabled: yes   i have face the error 
+#       update_cache: true
+#      when: distribution == 'Alpine'
+     
+    - name: Install pkg on Alpine Linux
+      community.general.apk:
+        name: nginx          # or your target package name
+        state: absent
+        #update_cache: true
+      when: distribution == 'Alpine'
+    - name: install pkg on Debian 
+      ansible.builtin.apt:
+        name: nginx
+        state: absent
+        #update_cache: true 
+      when: distribution == 'Debian'

@@ -1,0 +1,26 @@
+
+---
+- name: Detect Package Manager across all hosts
+  hosts: all
+  gather_facts: true
+  tasks:
+    - name: Display detected package manager
+      ansible.builtin.debug:
+        msg: >
+          Host '{{ inventory_hostname }}' runs {{ ansible_distribution }} 
+          ({{ ansible_os_family }}) and uses package manager: '{{ ansible_pkg_mgr }}'
+
+    - name: Example action based on package manager
+      ansible.builtin.debug:
+        msg: "This node uses APT (Debian/Ubuntu)"
+      when: ansible_pkg_mgr == 'apt'
+
+    - name: Example action for APK (Alpine Linux)
+      ansible.builtin.debug:
+        msg: "This node uses APK (Alpine Linux)"
+      when: ansible_pkg_mgr == 'apk'
+
+    - name: Example action for DNF/YUM (RHEL/Fedora/CentOS)
+      ansible.builtin.debug:
+        msg: "This node uses DNF/YUM"
+      when: ansible_pkg_mgr in ['dnf', 'yum']

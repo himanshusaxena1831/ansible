@@ -1,0 +1,27 @@
+---
+- name: OS-Specific Tasks Example
+  hosts: all
+  become: true
+  gather_facts: true
+  tasks:
+    # Task for Alpine Linux targets
+    - name: Install curl on Alpine nodes
+      community.general.apk:
+        name: curl
+        state: present
+      when: ansible_facts['distribution'] == 'Alpine'
+
+    # Task for Debian targets
+    - name: Install curl on Debian nodes
+      ansible.builtin.apt:
+        name: curl
+        state: present
+        update_cache: yes
+      when: ansible_facts['distribution'] == 'Debian'
+
+    # Task for RedHat / CentOS / Fedora (if added later)
+    - name: Install curl on RHEL/Fedora nodes
+      ansible.builtin.dnf:
+        name: curl
+        state: present
+      when: ansible_facts['distribution'] in ['RedHat', 'CentOS', 'Fedora']

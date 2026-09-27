@@ -1,0 +1,105 @@
+
+
+---
+- name: Deploy Custom Nginx Sample Page Across All Targets
+  hosts: targets
+  become: true
+  gather_facts: true
+
+  vars:
+    # Standard default web roots
+    nginx_doc_root_debian: /var/www/html
+    nginx_doc_root_alpine: /usr/share/nginx/html
+
+  tasks:
+    # ----------------------------------------------------
+    # 1. Determine Document Root Based on OS Distribution
+    # ----------------------------------------------------
+    - name: Set document root fact for Debian
+      ansible.builtin.set_fact:
+        target_doc_root: "{{ nginx_doc_root_debian }}"
+      when: ansible_facts['distribution'] == 'Debian'
+
+    - name: Set document root fact for Alpine
+      ansible.builtin.set_fact:
+        target_doc_root: "{{ nginx_doc_root_alpine }}"
+      when: ansible_facts['distribution'] == 'Alpine'
+
+    - name: Ensure target document root directory exists
+      ansible.builtin.file:
+        path: "{{ target_doc_root }}"
+        state: directory
+        owner: root
+        group: root
+        mode: '0755'
+
+    # ----------------------------------------------------
+    # 2. Deploy Dynamic Sample HTML Landing Page
+    # ----------------------------------------------------
+    - name: Deploy index.html with container metadata
+      ansible.builtin.copy:
+        dest: "{{ target_doc_root }}/index.html"
+        owner: root
+        group: root
+        mode: '0644'
+        content: |
+          <!DOCTYPE html>
+          <html lang="en">
+          <head>
+              <meta charset="UTF-8">
+              <title>Ansible Lab Node: {{ inventory_hostname }}</title>
+              <style>
+                  body { font-family: Arial, sans-serif; margin: 40px; background-color: #f4f6f9; color: #333; }
+                  .card { background: white; padding: 25px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); max-width: 600px; }
+                  h1 { color: #0056b3; }
+                  .badge { display: inline-block; padding: 4px 8px; border-radius: 4px; font-weight: bold; background: #e2e8f0; }
+                  ul { line-height: 1.8; }
+              </style>
+          </head>
+          <body>
+              <div class="card">
+                  <h1>Nginx is Running!</h1>
+                  <p class="badge">Managed via Ansible</p>
+                  <ul>
+                      <li><strong>Hostname:</strong> {{ inventory_hostname }}</li>
+                      <li><strong>OS Distribution:</strong> {{ ansible_facts['distribution'] }} {{ ansible_facts['distribution_version'] }}</li>
+                      <li><strong>Architecture:</strong> {{ ansible_facts['architecture'] }}</li>
+                      <li><strong>Internal IP:</strong> {{ ansible_default_ipv4.address | default(ansible_all_ipv4_addresses[0]) }}</li>
+                      <li><strong>Document Root:</strong> {{ target_doc_root }}</li>
+                  </ul>
+              </div>
+          </body>
+          </html>
+
+    # ----------------------------------------------------
+    # 3. Start Nginx Service (Container-Compatible)
+    # ----------------------------------------------------
+    - name: Ensure Nginx is running on Debian
+      ansible.builtin.service:
+        name: nginx
+        state: started
+        enabled: true
+      when: ansible_facts['distribution'] == 'Debian'
+
+    - name: Start Nginx process directly on Alpine (no systemd in base container)
+      ansible.builtin.shell: |
+        if ! pgrep -x "nginx" > /dev/null; then
+          nginx
+        else
+          nginx -s reload
+        fi
+      when: ansible_facts['distribution'] == 'Alpine'
+
+    # ----------------------------------------------------
+    # 4. Verify Local Nginx Web Server Response
+    # ----------------------------------------------------
+    - name: Test HTTP response on localhost
+      ansible.builtin.uri:
+        url: "http://127.0.0.1:80"
+        return_content: true
+        status_code: 200
+      register: http_response
+
+    - name: Confirm sample page deployment
+      ansible.builtin.debug:
+        msg: "Successfully verified HTTP 200 on {{ inventory_hostname }} ({{ ansible_facts['distribution'] }})"

@@ -1,6 +1,6 @@
 ---
 - name: Show Target Machine IPs
-  hosts: delhi
+  hosts: all
   gather_facts: true
   tasks:
     - name: Display Hostname and IP

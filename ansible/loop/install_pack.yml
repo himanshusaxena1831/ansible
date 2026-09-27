@@ -1,0 +1,14 @@
+---
+- name: install package 
+  hosts: all 
+  become: true
+  tasks: 
+    - name: install package using loop 
+      ansible.builtin.package: 
+        name: "{{ item }}"
+        state: absent
+      loop: ['openjdk17','maven']
+      register: response 
+    - name: print the results
+      ansible.builtin.debug:
+        var: response 
